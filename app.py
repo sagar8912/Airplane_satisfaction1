@@ -5,15 +5,34 @@ import os
 
 app = Flask(__name__)
 
-# -------- LOAD MODEL --------
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "xgb_cassifer.pkl")
+# ===============================
+# BASE DIRECTORY
+# ===============================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# ===============================
+# MODEL PATH (MAKE SURE FILE EXISTS)
+# ===============================
+MODEL_PATH = os.path.join(BASE_DIR, "xgb_classifier.pkl")
+
+if not os.path.exists(MODEL_PATH):
+    raise FileNotFoundError(f"❌ Model file not found at: {MODEL_PATH}")
+
+# ===============================
+# LOAD MODEL
+# ===============================
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
 
+print("✅ Model loaded successfully")
+
+# ===============================
+# ROUTES
+# ===============================
 @app.route("/")
 def home():
     return render_template("index.html")
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -30,7 +49,7 @@ def predict():
     airport = int(request.form["airport"])
     clean = int(request.form["clean"])
 
-    # ---------- NUMERIC DATA ONLY ----------
+    # ---------- MODEL INPUT ----------
     data = {
         "Age": age,
         "Flight Distance": flight_distance,
@@ -51,10 +70,10 @@ def predict():
         "Departure Delay in Minutes": dep_delay,
         "Arrival Delay in Minutes": arr_delay,
 
-        # ---------- DUMMY VARIABLES (NUMERIC) ----------
-        "Gender": 0,
-        "Customer Type": 1,
-        "Type of Travel": 1,
+        # ----- Encoded categorical values -----
+        "Gender": 0,               # Female
+        "Customer Type": 1,        # Loyal Customer
+        "Type of Travel": 1,       # Business travel
         "Class_Business": 0,
         "Class_Eco": 1,
         "Class_Eco Plus": 0
@@ -72,9 +91,7 @@ def predict():
 
     avg_rating = (comfort + service + digital + airport + clean) / 5
 
-    if avg_rating <= 2.5 or prob < 0.55:
-        result = "Dissatisfied 😞"
-    elif avg_rating >= 3.5 and prob >= 0.6:
+    if avg_rating >= 3.5 and prob >= 0.6:
         result = "Satisfied 😊"
     else:
         result = "Dissatisfied 😞"
@@ -85,8 +102,14 @@ def predict():
         confidence=confidence
     )
 
+
+# ===============================
+# RUN APP
+# ===============================
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8000)
+
+
 
 
 
