@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invistico Airline Satisfaction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="overlay">
+    <h1>✈️ Airline Satisfaction</h1>
+
+    <form action="/predict" method="POST">
+
+        <label>Age</label>
+        <input type="number" name="age" required>
+
+        <label>Flight Distance</label>
+        <input type="number" name="flight_distance" required>
+
+        <label>Departure Delay (Minutes)</label>
+        <input type="number" name="dep_delay" required>
+
+        <label>Arrival Delay (Minutes)</label>
+        <input type="number" name="arr_delay" required>
+
+        <label>Seat Comfort (1–5)</label>
+        <input type="number" name="comfort" min="1" max="5" required>
+
+        <label>Service Rating (1–5)</label>
+        <input type="number" name="service" min="1" max="5" required>
+
+        <label>Digital Service (1–5)</label>
+        <input type="number" name="digital" min="1" max="5" required>
+
+        <label>Airport Convenience (1–5)</label>
+        <input type="number" name="airport" min="1" max="5" required>
+
+        <label>Cleanliness (1–5)</label>
+        <input type="number" name="clean" min="1" max="5" required>
+
+        <button type="submit">Predict Satisfaction</button>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

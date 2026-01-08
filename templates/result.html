@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="overlay result-box">
+    <h1>Prediction Result</h1>
+
+    <div class="result">
+        {{ prediction }}
+    </div>
+
+    <div class="confidence">
+        Confidence: {{ confidence }}%
+    </div>
+
+    <a href="/" class="back-btn">🔙 Predict Again</a>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
